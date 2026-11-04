@@ -46,6 +46,12 @@ header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-item
 .chip:hover{border-color:var(--muted)}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--wall)}
 .chip[aria-pressed="true"] small{color:#cfc8c1}
+/* 정렬 */
+.sort{flex:none;margin-left:auto;position:sticky;right:0;display:flex;background:var(--wall);padding-left:10px;box-shadow:-12px 0 10px -6px var(--wall)}
+.sort button{border:1px solid var(--line);background:var(--wall);padding:2px 10px;font-size:.8rem;color:var(--muted);cursor:pointer}
+.sort button:first-child{border-radius:999px 0 0 999px}
+.sort button:last-child{border-radius:0 999px 999px 0;border-left:0}
+.sort button[aria-pressed="true"]{color:var(--ink);background:var(--tint);font-weight:500}
 
 /* 선반 */
 .shelf{padding-top:40px}
@@ -151,7 +157,7 @@ $('#stats').innerHTML = `선반 <b>${DATA.sessions.length}</b>칸 · 후기 <b>$
 const rBar = $('#readers'); let active=null;
 readers.forEach(r => { const b=document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.r=r; b.setAttribute('aria-pressed','false'); b.innerHTML=`${esc(r)}<small>${count[r]}</small>`; rBar.appendChild(b); });
 rBar.addEventListener('click', e => { const b=e.target.closest('button[data-r]'); if(!b) return; active = active===b.dataset.r?null:b.dataset.r;
-  rBar.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.r===active)));
+  rBar.querySelectorAll('button[data-r]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.r===active)));
   document.querySelectorAll('.book').forEach(el=>el.classList.toggle('dim', !!active && !el.dataset.by.split('|').includes(active))); });
 
 const ITEMS = []; const caseEl = $('#case');
@@ -179,6 +185,21 @@ DATA.sessions.forEach(s => {
   }
   sec.appendChild(row); caseEl.appendChild(sec);
 });
+
+// 정렬: 오래된순 / 최신순
+const sortBox=document.createElement('div'); sortBox.className='sort'; sortBox.setAttribute('role','group'); sortBox.setAttribute('aria-label','선반 정렬');
+sortBox.innerHTML='<button type="button" data-sort="old">오래된순</button><button type="button" data-sort="new">최신순</button>';
+rBar.appendChild(sortBox);
+function applySort(mode){
+  const secs=[...caseEl.querySelectorAll('.shelf')].sort((a,b)=>a.id.localeCompare(b.id));
+  if(mode==='new') secs.reverse();
+  secs.forEach(x=>caseEl.appendChild(x));
+  sortBox.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.sort===mode)));
+  try{localStorage.setItem('shelfSort',mode)}catch(e){}
+}
+sortBox.addEventListener('click',e=>{const b=e.target.closest('button[data-sort]'); if(b) applySort(b.dataset.sort);});
+let savedSort='old'; try{savedSort=localStorage.getItem('shelfSort')||'old'}catch(e){}
+applySort(savedSort);
 
 const ov=$('#overlay'), pn=$('#panel'); let cur=-1, lastFocus=null;
 function render(){
