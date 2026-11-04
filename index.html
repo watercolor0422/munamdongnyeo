@@ -70,7 +70,7 @@ header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-item
 .extra-tag{font-size:.72rem;letter-spacing:.06em;color:var(--muted);writing-mode:vertical-rl;align-self:flex-end;margin-bottom:calc(14px + var(--gap))}
 
 /* 펼친 후기 */
-.overlay{position:fixed;inset:0;z-index:50;background:rgba(29,27,26,.32);display:flex;justify-content:flex-end}
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(29,27,26,.32);display:flex;justify-content:flex-end}.overlay[hidden]{display:none}
 .panel{position:relative;width:min(560px,100%);height:100%;overflow:auto;background:var(--wall);box-shadow:-20px 0 40px rgba(0,0,0,.12);
   padding:calc(28px + env(safe-area-inset-top,0px)) max(28px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) 32px;animation:slide .28s ease}
 @keyframes slide{from{transform:translateX(40px);opacity:0}}
