@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>무남독녀 책장</title>
 <meta name="description" content="중앙대 약학대학 독서 소모임 무남독녀의 책장. 표지를 눌러 우리들의 기록과 후기를 엿보세요!">
 <meta property="og:type" content="website">
@@ -61,6 +65,7 @@ header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-item
 .sort button:first-child{border-radius:999px 0 0 999px}
 .sort button:last-child{border-radius:0 999px 999px 0;border-left:0}
 .sort button[aria-pressed="true"]{color:var(--ink);background:var(--tint);font-weight:500}
+@media (max-width:520px){.sort{padding-left:8px}.sort button{padding:2px 8px;font-size:.75rem}}
 
 /* 선반 */
 .shelf{padding-top:40px}
